@@ -1,31 +1,25 @@
 pipeline{
     agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-		
-        stage('Build and Test') {
-            steps {
-                script {
-                    sh 'mvn clean install'
-                }
-            }
-        }
+    environment {
+        PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
     }
-
+    stages{
+       stage('Checkout'){
+            steps{
+                git 'git@github.com:NagiReddyDEVOPS/Sonar-Project.git'
+            }
+         }        
+       stage('Package'){
+            steps{
+                sh 'mvn clean package'
+            }
+         }
     post {
         always {
             junit 'target/surefire-reports/*.xml'
         }
     }
-
-
-
-		 
+	
         stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
