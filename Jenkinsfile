@@ -9,14 +9,13 @@ pipeline{
                 git 'git@github.com:Raj-986699/Sonar-Project.git'
             }
          }       
-        stage('Build and Test') }
+       stage('Build and Test') }
             steps {
                 script {
                     sh 'mvn clean install'
                 }
             }
         }
-    }
 
     post {
         always {
