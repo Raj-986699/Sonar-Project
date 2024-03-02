@@ -57,6 +57,5 @@ pipeline{
      steps {
         sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.126.137.229:/opt/apache-tomcat-8.0.52/webapps'
            }
-   }
-}    
+   }    
 }
