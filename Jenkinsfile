@@ -8,19 +8,22 @@ pipeline{
             steps{
                 git 'git@github.com:Raj-986699/Sonar-Project.git'
             }
-         }        
-       stage('Package'){
-            steps{
-                sh 'mvn clean package'
+         }       
+        stage('Build and Test') }
+            steps {
+                script {
+                    sh 'mvn clean install'
+                }
             }
-			post {
-        success {
+        }
+    }
+
+    post {
+        always {
             junit 'target/surefire-reports/*.xml'
         }
     }
-			
 
-         }
 		 
         stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
