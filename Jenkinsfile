@@ -6,7 +6,7 @@ pipeline{
 	  post {
         success {
             emailext(
-                to: 'yesuraju8989@gmail.com', // Email address of the recipient
+                to: 'rraju70569@gmail.com', // Email address of the recipient
                 subject: "Jenkins Pipeline - Build Successful",
                 body: "The Jenkins pipeline has completed successfully.",
                 mimeType: 'text/html'
@@ -14,7 +14,7 @@ pipeline{
         }
         failure {
             emailext(
-                to: 'yesuraju8989@gmail',
+                to: 'rraju70569@gmail.com',
                 subject: "Jenkins Pipeline - Build Failed",
                 body: "The Jenkins pipeline has failed. Please check the build logs for details.",
                 mimeType: 'text/html'
