@@ -1,8 +1,14 @@
-pipeline { 
+pipeline{
     agent any
     environment {
         PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
     }
+	 post {
+             always {
+                 junit 'target/surefire-reports/*.xml'
+        }
+    }
+}	
     stages{
        stage('Checkout'){
             steps{
@@ -14,13 +20,7 @@ pipeline {
                 sh 'mvn clean package'
             }
          }
-         post {
-             always {
-                 junit 'target/surefire-reports/*.xml'
-        }
-    }
-}
-         
+		        
         stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
@@ -56,4 +56,5 @@ pipeline {
            }
    }    
 }
+
 
