@@ -1,29 +1,19 @@
 pipeline{
     agent any
-	stages {
     environment {
         PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
     }
-	
-	 post {
-             always {
-                 junit 'target/surefire-reports/*.xml'
-        }
-    }
-}
-	
     stages{
        stage('Checkout'){
             steps{
-                git 'git@github.com:NagiReddyDEVOPS/Sonar-Project.git'
+                git 'git@github.com:Raj-986699/Sonar-Project.git'
             }
          }        
        stage('Package'){
             steps{
                 sh 'mvn clean package'
             }
-         }
-		        
+         }    
         stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
@@ -57,11 +47,27 @@ pipeline{
      steps {
         sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.126.137.229:/opt/apache-tomcat-8.0.52/webapps'
            }
-   }    
+   } 
+   post {
+        success {
+            emailext(
+                to: 'yesuraju8989@gmail.com', // Email address of the recipient
+                subject: "Jenkins Pipeline - Build Successful",
+                body: "The Jenkins pipeline has completed successfully.",
+                mimeType: 'text/html'
+            )
+        }
+        failure {
+            emailext(
+                to: 'yesuraju8989@gmail',
+                subject: "Jenkins Pipeline - Build Failed",
+                body: "The Jenkins pipeline has failed. Please check the build logs for details.",
+                mimeType: 'text/html'
+            )
+        }
+    }
+
 }
-
-
-
 }
 
 
