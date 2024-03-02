@@ -1,4 +1,4 @@
-pipeline{
+pipeline { 
     agent any
     environment {
         PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
@@ -14,7 +14,7 @@ pipeline{
                 sh 'mvn clean package'
             }
          }
-		 post {
+         post {
              always {
                  junit 'target/surefire-reports/*.xml'
         }
