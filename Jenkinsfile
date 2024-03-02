@@ -15,11 +15,10 @@ pipeline{
                     sh 'mvn clean install'
                 }
             }
-        }
-
-    post {
-        always {
-            junit 'target/surefire-reports/*.xml'
+			post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+				}
         }
     }
 
@@ -58,4 +57,5 @@ pipeline{
         sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.126.137.229:/opt/apache-tomcat-8.0.52/webapps'
            }
    }    
+}
 }
