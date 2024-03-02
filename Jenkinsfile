@@ -1,26 +1,29 @@
-pipeline{
+pipeline {
     agent any
-    environment {
-        PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
-    }
-    stages{
-       stage('Checkout'){
-            steps{
-                git 'git@github.com:Raj-986699/Sonar-Project.git'
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
-         }       
-       stage('package') }
+        }
+
+        stage('Build and Test') {
             steps {
                 script {
                     sh 'mvn clean install'
                 }
             }
-			post {
-                success {
-                    junit 'target/surefire-reports/*.xml'
-				}
         }
     }
+
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+    }
+}
+
 
 		 
         stage('SonarQube analysis') {
