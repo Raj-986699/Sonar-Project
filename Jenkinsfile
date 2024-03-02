@@ -1,4 +1,4 @@
-pipeline {
+pipeline{
     agent any
 
     stages {
@@ -7,7 +7,7 @@ pipeline {
                 checkout scm
             }
         }
-
+		
         stage('Build and Test') {
             steps {
                 script {
@@ -22,7 +22,7 @@ pipeline {
             junit 'target/surefire-reports/*.xml'
         }
     }
-}
+
 
 
 		 
