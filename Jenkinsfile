@@ -3,6 +3,25 @@ pipeline{
     environment {
         PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
     }
+	  post {
+        success {
+            emailext(
+                to: 'yesuraju8989@gmail.com', // Email address of the recipient
+                subject: "Jenkins Pipeline - Build Successful",
+                body: "The Jenkins pipeline has completed successfully.",
+                mimeType: 'text/html'
+            )
+        }
+        failure {
+            emailext(
+                to: 'yesuraju8989@gmail',
+                subject: "Jenkins Pipeline - Build Failed",
+                body: "The Jenkins pipeline has failed. Please check the build logs for details.",
+                mimeType: 'text/html'
+            )
+        }
+    }
+
     stages{
        stage('Checkout'){
             steps{
@@ -48,27 +67,8 @@ pipeline{
         sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.126.137.229:/opt/apache-tomcat-8.0.52/webapps'
            }
    } 
-   post {
-        success {
-            emailext(
-                to: 'yesuraju8989@gmail.com', // Email address of the recipient
-                subject: "Jenkins Pipeline - Build Successful",
-                body: "The Jenkins pipeline has completed successfully.",
-                mimeType: 'text/html'
-            )
-        }
-        failure {
-            emailext(
-                to: 'yesuraju8989@gmail',
-                subject: "Jenkins Pipeline - Build Failed",
-                body: "The Jenkins pipeline has failed. Please check the build logs for details.",
-                mimeType: 'text/html'
-            )
-        }
-    }
-
+ 
 }
 }
-
 
 
