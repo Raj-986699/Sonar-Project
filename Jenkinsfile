@@ -9,14 +9,14 @@ pipeline{
                 git 'git@github.com:Raj-986699/Sonar-Project.git'
             }
          }       
-       stage('Build and Test') }
+       stage('package') }
             steps {
                 script {
                     sh 'mvn clean install'
                 }
             }
 			post {
-                always {
+                success {
                     junit 'target/surefire-reports/*.xml'
 				}
         }
