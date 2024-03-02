@@ -1,14 +1,17 @@
-pipeline {
+pipeline{
     agent any
+	stages {
     environment {
         PATH = "$PATH:/opt/apache-maven-3.9.6/bin"
     }
+	
 	 post {
              always {
                  junit 'target/surefire-reports/*.xml'
         }
     }
-}	
+}
+	
     stages{
        stage('Checkout'){
             steps{
@@ -56,5 +59,6 @@ pipeline {
            }
    }    
 }
+
 
 
