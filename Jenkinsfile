@@ -50,4 +50,29 @@ pipeline{
    }
 }    
 }
-
+post {
+        success {
+            emailext (
+                subject: "Pipeline Success: ${env.JOB_NAME}",
+                body: "The pipeline ${env.JOB_NAME} has successfully completed.",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                to: "manchala.ksvc@gmail.com",
+                replyTo: "manchala.ksvc@gmail.com",
+                from: "manchala.ksvc@gmail.com",
+                attachLog: true,
+                compressLog: true
+            )
+        }
+        failure {
+            emailext (
+                subject: "Pipeline Failure: ${env.JOB_NAME}",
+                body: "The pipeline ${env.JOB_NAME} has failed. Please check the Jenkins console output for more details.",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                to: "manchala.ksvc@gmail.com",
+                replyTo: "manchala.ksvc@gmail.com",
+                from: "manchala.ksvc@gmail.com",
+                attachLog: true,
+                compressLog: true
+            )
+        }
+    }
