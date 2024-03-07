@@ -55,15 +55,9 @@ pipeline{
         sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.232.216.126:/opt/apache-tomcat-8.0.52/webapps'
         
            }
-        }
+        
     }
-   
-    post {
-        success {
-            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Success', to: 'yesuraju8989@gmail.com'
-        }
-        failure {
-            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Failed', to: 'yesuraju8989@gmail.com'
-        }
-    }    
 }
+}
+   
+
