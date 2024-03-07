@@ -6,21 +6,28 @@ pipeline{
     stages{
        stage('Checkout'){
             steps{
-                git 'git@github.com:NagiReddyDEVOPS/Sonar-Project.git'
+                git 'git@github.com:Raj-986699/Sonar-Project.git'
             }
-         }        
+       }
+                 
        stage('Package'){
             steps{
                 sh 'mvn clean package'
             }
+           post {
+               always {
+                 junit '***/target/surefire-reports/TEST-*.xml'
          }
+         }
+         }
+       
         stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
         withSonarQubeEnv('SonarQube') { 
         // If you have configured more than one global server connection, you can specify its name
 //      sh "${scannerHome}/bin/sonar-scanner"
-        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-project -Dsonar.host.url=http://13.127.158.230:9000 -Dsonar.login=sqp_c1520b88484f0943a1a85880acbbbcb0b79d469e"
+        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-project -Dsonar.host.url=http://3.110.204.25:9000 -Dsonar.login=sqp_cdc489969c57123323b72898e01f60463d986899"
     }
         }
         }
@@ -30,11 +37,11 @@ pipeline{
       nexusArtifactUploader(
       nexusVersion: 'nexus3',
       protocol: 'http',
-      nexusUrl: '43.204.221.160:8081',
+      nexusUrl: '43.204.100.145:8081',
       groupId: 'myGroupId',
       version: '1.0-SNAPSHOT',
       repository: 'maven-snapshots',
-      credentialsId: 'nexuscredentials',
+      credentialsId: nexuscredentials',
       artifacts: [
       [artifactId: 'maven-project',
       classifier: '',
@@ -45,34 +52,19 @@ pipeline{
         }
         stage ('Deploy to Prod'){
      steps {
-        sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@3.7.46.241:/opt/apache-tomcat-8.0.52/webapps'
+        sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.232.216.126:/opt/apache-tomcat-8.0.52/webapps'
+        
            }
-   }
-}    
-}
-post {
-        success {
-            emailext (
-                subject: "Pipeline Success: ${env.JOB_NAME}",
-                body: "The pipeline ${env.JOB_NAME} has successfully completed.",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                to: "rraju70569@gmail.com",
-                replyTo: "rraju70569@gmail.com",
-                from: "rraju70569@gmail.com",
-                attachLog: true,
-                compressLog: true
-            )
-        }
-        failure {
-            emailext (
-                subject: "Pipeline Failure: ${env.JOB_NAME}",
-                body: "The pipeline ${env.JOB_NAME} has failed. Please check the Jenkins console output for more details.",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                to: "rraju70569@gmail.com",
-                replyTo: "rraju70569@gmail.com",
-                from: "rraju70569@gmail.com",
-                attachLog: true,
-                compressLog: true
-            )
         }
     }
+   
+    post {
+        success {
+            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Success', to: 'yesuraju8989@gmail.com'
+        }
+        failure {
+            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Failed', to: 'yesuraju8989@gmail.com'
+        }
+    }    
+}
+
