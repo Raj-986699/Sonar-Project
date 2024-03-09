@@ -27,7 +27,8 @@ pipeline{
         withSonarQubeEnv('SonarQube') { 
         // If you have configured more than one global server connection, you can specify its name
 //      sh "${scannerHome}/bin/sonar-scanner"
-        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-project -Dsonar.host.url=http://3.110.204.25:9000 -Dsonar.login=sqp_cdc489969c57123323b72898e01f60463d986899"
+        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-project -Dsonar.host.url=http://13.232.112.145:9000 -Dsonar.login="sqp_e12d8be32d006d85e215fecfd170f41679f69604"
+
     }
         }
         }
@@ -37,11 +38,11 @@ pipeline{
       nexusArtifactUploader(
       nexusVersion: 'nexus3',
       protocol: 'http',
-      nexusUrl: '43.204.100.145:8081',
+      nexusUrl: '13.232.0.124:8081',
       groupId: 'myGroupId',
       version: '1.0-SNAPSHOT',
       repository: 'maven-snapshots',
-      credentialsId: nexuscredentials',
+      credentialsId: 'nexuscredentials',
       artifacts: [
       [artifactId: 'maven-project',
       classifier: '',
@@ -52,18 +53,17 @@ pipeline{
         }
         stage ('Deploy to Prod'){
      steps {
-        sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.232.216.126:/opt/apache-tomcat-8.0.52/webapps'
+        sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war root@13.127.23.129:/opt/apache-tomcat-8.0.52/webapps'
         
            }
         }
     }
 	post {
         success {
-            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Success', to: 'yesuraju8989@gmail.com'
+            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Success', to: 'kaneezsakina98@gmail.com'
         }
         failure {
-            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Failed', to: 'yesuraju8989@gmail.com'
+            emailext attachLog: true, body: 'Email sent out from Jenkins', subject: 'Test Email -Failed', to: 'kaneezsakina98@gmail.com'
         }
     }    
 }
-
